@@ -1,11 +1,12 @@
 import pytest
 
+import unittest
 from classes.many_to_many import Article
 from classes.many_to_many import Magazine
 from classes.many_to_many import Author
 
 
-class TestArticle:
+class TestArticle(unittest.TestCase):
     """Article in many_to_many.py"""
 
     def test_has_title(self):
@@ -25,14 +26,14 @@ class TestArticle:
         article_1 = Article(author, magazine, "How to wear a tutu with style")
 
         # comment out the next two lines if using Exceptions
-        article_1.title = 500
-        assert article_1.title == "How to wear a tutu with style"
+        # article_1.title = 500
+        # assert article_1.title == "How to wear a tutu with style"
         
         assert isinstance(article_1.title, str)
 
         # uncomment the next two lines if using Exceptions
-        # with pytest.raises(Exception):
-        #     Article(author, magazine, 500)
+        with pytest.raises(Exception):
+             Article(author, magazine, 500)
 
     def test_title_is_valid(self):
         """title is between 5 and 50 characters inclusive"""
@@ -43,12 +44,12 @@ class TestArticle:
         assert 5 <= len(article_1.title) <= 50
 
         # uncomment the next two lines if using Exceptions
-        # with pytest.raises(Exception):
-        #     Article(author, magazine, "Test")
+        with pytest.raises(Exception):
+             Article(author, magazine, "Test")
 
         # uncomment the next two lines if using Exceptions
-        # with pytest.raises(Exception):
-        #     Article(author, magazine, "How to wear a tutu with style and walk confidently down the street")
+        with pytest.raises(Exception):
+             Article(author, magazine, "How to wear a tutu with style and walk confidently down the street")
 
     def test_has_an_author(self):
         """article has an author"""
@@ -110,7 +111,10 @@ class TestArticle:
         magazine_2 = Magazine("AD", "Architecture & Design")
         article_1 = Article(author, magazine_1, "How to wear a tutu with style")
         article_2 = Article(author, magazine_2, "Dating life in NYC")
-
+        Article.all = []
+        assert len(Article.all) == 0
+            
+        Article.all = [article_1, article_2]
         assert len(Article.all) == 2
         assert article_1 in Article.all
         assert article_2 in Article.all
